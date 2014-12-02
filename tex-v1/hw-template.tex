@@ -1,0 +1,139 @@
+\input{mlClassDefs.tex}
+
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\topmargin -0.5in
+\textheight 9.0in
+
+\begin{document}
+
+\solution{Gen Nishida}{\today}{4}{Fall 2014}
+% Fill in the above, for example, as follows:
+% \solution{John Smith}{\today}{1}{Fall 2014}
+
+\pagestyle{myheadings}  % Leave this command alone
+
+\section*{Questions}
+
+\begin{enumerate}
+\item {\bf Boosting}
+
+\begin{enumerate}
+\item[(1)] The weak hypothesis used at each round, and its error
+
+{\bf 1st round} $h_1(x)={\rm sign} (x_1>6)$, $\epsilon_1=0.2$ ($\alpha_1=0.6931$)
+
+\begin{table}[htb]
+  \begin{center}
+  \begin{tabular}{|c|c|c|c|c|} \hline
+    index & $x_1$ & $x_2$ & $y$ & prediction \\ \hline
+    1 & 1 & 10 & - & - \\ \hline
+    2 & 4 & 4 & - & -\\ \hline
+    3 & 8 & 7 & + & + \\ \hline
+    4 & 5 & 6 & - & - \\ \hline
+    5 & 3 & 16 & - & - \\ \hline
+    6 & 7 & 7 & + & + \\ \hline
+    7 & 10 & 14 & + & + \\ \hline
+    8 & 4 & 2 & - & - \\ \hline
+    9 & 4 & 10 & + & - \\ \hline
+    10 & 8 & 8 & - & + \\ \hline
+  \end{tabular}
+  \caption{The prediction by $h_1$}
+  \label{tab:1st_round_prediction}
+  \end{center}
+\end{table}
+
+{\bf 2nd round} $h_2(x)=sign (x_2>9)$, $\epsilon_1=0.25$ ($\alpha_2=0.5493$)
+
+\begin{table}[htb]
+  \begin{center}
+  \begin{tabular}{|c|c|c|c|c|} \hline
+    index & $x_1$ & $x_2$ & $y$ & prediction \\ \hline
+    1 & 1 & 10 & - & + \\ \hline
+    2 & 4 & 4 & - & - \\ \hline
+    3 & 8 & 7 & + & - \\ \hline
+    4 & 5 & 6 & - & - \\ \hline
+    5 & 3 & 16 & - & + \\ \hline
+    6 & 7 & 7 & + & - \\ \hline
+    7 & 10 & 14 & + & + \\ \hline
+    8 & 4 & 2 & - & - \\ \hline
+    9 & 4 & 10 & + & + \\ \hline
+    10 & 8 & 8 & - & - \\ \hline
+  \end{tabular}
+  \caption{The prediction by $h_1$}
+  \label{tab:1st_round_prediction}
+  \end{center}
+\end{table}
+
+\item[(2)] The distribution $D_i$ over the examples for each round
+
+The distribution $D_i$ evolves over the rounds as shown in Table \ref{tab:distribution_evolution}.
+
+\begin{table}[htb]
+  \begin{center}
+  \begin{tabular}{|c|c|c|c|c|} \hline
+    index & $D_1$ & $D_2$ & $D_3$ \\ \hline
+    1 & 0.1 & 0.0625 & 0.125 \\ \hline
+    2 & 0.1 & 0.0625 & 0.0417 \\ \hline
+    3 & 0.1 & 0.0625 & 0.125 \\ \hline
+    4 & 0.1 & 0.0625 & 0.0417 \\ \hline
+    5 & 0.1 & 0.0625 & 0.125 \\ \hline
+    6 & 0.1 & 0.0625 & 0.125 \\ \hline
+    7 & 0.1 & 0.0625 & 0.0417 \\ \hline
+    8 & 0.1 & 0.0625 & 0.0417 \\ \hline
+    9 & 0.1 & 0.25 & 0.1666 \\ \hline
+    10 & 0.1 & 0.25 & 0.1666 \\ \hline
+  \end{tabular}
+  \caption{The distribution $D_i$}
+  \label{tab:distribution_evolution}
+  \end{center}
+\end{table}
+
+\item[(3)] The final hypothesis after running two rounds.
+
+$H_{\rm final}(x)={\rm sign} \left[ 0.6931 \times {\rm sign}(x_1 > 6) + 0.5493 \times {\rm sign}(x_2 > 9) \right]$
+
+\end{enumerate}
+
+\item {\bf Naive Bayes}
+
+\begin{enumerate}
+\item[(1)] Write the joint log-likelihood of a document and labels (i.e., $\log P(D_i, y_i)$).
+
+First, the joint probability $P(d_i, y_i)$ is
+\[
+\left[ \frac{n!}{a_i!b_i!c_i!d_i!}\alpha_1^{a_i}\beta_1^{b_i}\gamma_1^{c_i}\delta_1^{d_i} \times P(y=1)\right]^y \times \left[ \frac{n!}{a_i!b_i!c_i!d_i!}\alpha_0^{a_i}\beta_0^{b_i}\gamma_0^{c_i}\delta_0^{d_i} \times P(y=0)\right]^{(1-y)}
+\]
+Since we do not know a prior probability of $P(y)$, we just use the uniform distribution, which is $P(y)=1/2$. Thus,
+\[
+\frac{1}{2} \times \left[ \frac{n!}{a_i!b_i!c_i!d_i!}\alpha_1^{a_i}\beta_1^{b_i}\gamma_1^{c_i}\delta_1^{d_i}\right]^y \times \left[ \frac{n!}{a_i!b_i!c_i!d_i!}\alpha_0^{a_i}\beta_0^{b_i}\gamma_0^{c_i}\delta_0^{d_i}\right]^{(1-y)}
+\]
+Then, its logarithm becomes
+\begin{eqnarray}
+\log \frac{1}{2} + y \log \left[ \frac{n!}{a_i!b_i!c_i!d_i!}\alpha_1^{a_i}\beta_1^{b_i}\gamma_1^{c_i}\delta_1^{d_i}\right] + (1-y) \log \left[ \frac{n!}{a_i!b_i!c_i!d_i!}\alpha_0^{a_i}\beta_0^{b_i}\gamma_0^{c_i}\delta_0^{d_i}\right]
+ \nonumber \\
+= \log \frac{1}{2} + \log \frac{n!}{a_i!b_i!c_i!d_i!} + y \left[ a_i \log \alpha_1 + b_i \log \beta_1 + c_i \log \gamma_1 + d_i \log \delta_1 \right] \nonumber \\ + (1-y) \left[ a_i \log \alpha_0 + b_i \log \beta_0 + c_i \log \gamma_0 + d_i \log \delta_0 \right] \nonumber
+\end{eqnarray}
+
+\end{enumerate}
+
+\item {\bf Bayesian Network}
+\begin{enumerate}
+
+\item[(1)] How many parameters are needed to define the network?
+
+\item[(2)] Write the expression calculating (a) $P(A=1, D=2)$ (b) $P(A=1,D=2|C=1)$
+
+(a) $P(A=1)P(D=2)$
+
+(b) $\frac{P(A=1)P(C=1|A=1)P(D=2|C=1)}{P(C=1)}$
+
+\end{enumerate}
+
+\item {\bf Variable Elimination}
+
+\end{enumerate}
+
+\end{document}
+
